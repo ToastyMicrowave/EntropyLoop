@@ -124,14 +124,25 @@ void core1_entry() {
             min_entropy = 0.0f;
         }
 
+        // --- RAW BIT INPUT ---
+        // Keep an explicit handle to the exact bytes that feed the hash so we
+        // can dump the pre-hash bitstream alongside the post-hash output.
+        uint8_t *raw_bits = (uint8_t*)batch.samples;
+        size_t   raw_len  = sizeof(batch.samples);   // 1024 samples * 2 bytes = 2048
+        // ---------------------------
+
         // Hashing (SHA-512) - Note: We hash the RAW samples, not the derivative!
-        crypto_hash((unsigned char*)batch.samples, sizeof(batch.samples), hash_out_1);
+        crypto_hash(raw_bits, raw_len, hash_out_1);
         crypto_hash(hash_out_1, 64, hash_out_2);
 
         // Output
         printf("H_min: %.4f | R: %4d | Data: \n", min_entropy, dynamic_range);
         print_hex(hash_out_1, 64);
-        print_hex(hash_out_2, 64); 
+        print_hex(hash_out_2, 64);
+        // Emit the raw pre-hash bytes (exactly what was fed into SHA-512) on a
+        // labelled line so the host can pair each hash with its raw input.
+        printf("RAW: ");
+        print_hex(raw_bits, raw_len);
     }
 }
 

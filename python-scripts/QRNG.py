@@ -1,10 +1,13 @@
-import machine
-import rp2
+# Standard library
 import _thread
 import math
 import time
-import ubinascii
-import uhashlib
+import binascii
+import hashlib
+
+# RP2040 / MicroPython hardware
+import machine
+import rp2
 
 # ----------------------------------------------------------------------------
 # CONFIGURATION
@@ -98,18 +101,18 @@ def core1_entry():
             min_entropy = 0.0
             
         # Hashing (Using SHA256 as SHA512 isn't available in standard MicroPython)
-        h1_ctx = uhashlib.sha256()
+        h1_ctx = hashlib.sha256()
         h1_ctx.update(batch_bytes)
         hash_out_1 = h1_ctx.digest()
-        
-        h2_ctx = uhashlib.sha256()
+
+        h2_ctx = hashlib.sha256()
         h2_ctx.update(hash_out_1)
         hash_out_2 = h2_ctx.digest()
         
         # Output
         print(f"H_min: {min_entropy:.4f} | R: {dynamic_range:4d} | Data: ")
-        print(ubinascii.hexlify(hash_out_1).decode())
-        print(ubinascii.hexlify(hash_out_2).decode())
+        print(binascii.hexlify(hash_out_1).decode())
+        print(binascii.hexlify(hash_out_2).decode())
 
 # ----------------------------------------------------------------------------
 # CORE 0: Hardware Setup & Acquisition

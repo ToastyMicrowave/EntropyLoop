@@ -3,6 +3,17 @@ src/build/
 venv/
 RPI_PICO-20251209-v1.27.0.uf2
 
+# Third-party Pico SDK (cloned from raspberrypi/pico-sdk) — not part of this repo
+sdk/
+
+# Randomness test harness: built tools, generated streams, capture outputs
+tests/tools/
+tests/results/
+tests/streams/
+*.bin
+entropy_raw_*.json
+entropy_capture_*.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
